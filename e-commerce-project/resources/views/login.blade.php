@@ -13,7 +13,7 @@
                             @csrf
                             <div class="mb-3">
                                 <label for="" class="form-label">Email</label>
-                                <input type="email" name="email" class="form-control" placeholder="Email">
+                                <input type="email" name="email" value="{{ old('email') }}" class="form-control" placeholder="Email">
                                 @error('email')<span class="text-danger">{{ $message }}</span>@enderror
                             </div>
                             <div class="mb-3">

@@ -4,10 +4,10 @@
     <div class="container-fluid">
         <div class="card">
                     <div class="card-header">
-                        <h6 class="text-white bg-primary rounded p-2">Add Sub Category</h6>
+                        <h6 class="text-white bg-primary rounded p-2">Add Product</h6>
                     </div>
                     <div class="card-body">
-                        <form action="{{ route('category.subCategory.store',$category) }}" method="post">
+                        <form action="{{ route('subCategory.product.store',$subCategory) }}" method="post">
                             @csrf
                             <div class="mb-3">
                                 <label for="" class="form-label">Title</label>
@@ -19,9 +19,14 @@
                                 <input type="text" name="description" value="{{ old('description') }}" class="form-control" placeholder="Description">
                                  @error('description')<span class="text-danger">{{ $message }}</span>@enderror
                             </div>
+                            <div class="mb-3">
+                                <label for="" class="form-label">Price</label>
+                                <input type="number" name="price" value="{{ old('price') }}" class="form-control" placeholder="Price">
+                                 @error('price')<span class="text-danger">{{ $message }}</span>@enderror
+                            </div>
                             <div class="">
-                                 <a href="{{ route('category.subCategory.index',$category) }}" class="btn btn-secondary me-3">Cancle</a>
-                                <button type="submit" class="btn btn-primary">Add Sub Category</button>
+                                 <a href="{{ route('subCategory.product.index',$subCategory) }}" class="btn btn-secondary me-3">Cancle</a>
+                                <button type="submit" class="btn btn-primary">Add Product</button>
                             </div>
                         </form>
                     </div>

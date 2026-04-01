@@ -12,18 +12,18 @@
                             <div class="mb-3 d-flex justify-content-between gap-3">
                                 <div class="w-50">
                                 <label for="" class="form-label">First Name</label>
-                                <input type="text" name="firstName" class="form-control" placeholder="First Name">
+                                <input type="text" name="firstName" value="{{ old('firstName') }}" class="form-control" placeholder="First Name">
                                  @error('firstName')<span class="text-danger">{{ $message }}</span>@enderror
                             </div>
                             <div class="w-50">
                                 <label for="" class="form-label">Second Name</label>
-                                <input type="text" name="secondName" class="form-control" placeholder="Second Name">
+                                <input type="text" name="secondName" value="{{ old('secondName') }}" class="form-control" placeholder="Second Name">
                                  @error('secondName')<span class="text-danger">{{ $message }}</span>@enderror
                             </div>
                             </div>
                             <div class="mb-3">
                                 <label for="" class="form-label">Email</label>
-                                <input type="email" name="email" class="form-control" placeholder="Email">
+                                <input type="email" name="email" value="{{ old('email') }}" class="form-control" placeholder="Email">
                                  @error('email')<span class="text-danger">{{ $message }}</span>@enderror
                             </div>
                             <div class="mb-3">
@@ -34,15 +34,15 @@
                             <div class="mb-3 d-flex justify-content-between gap-3">
                                 <div class="w-50">
                                 <label for="" class="form-label">Date of Birth</label>
-                                <input type="date" name="dob" class="form-control">
+                                <input type="date" name="dob" value="{{ old('dob') }}" class="form-control">
                                  @error('dob')<span class="text-danger">{{ $message }}</span>@enderror
                             </div>
                             <div class="w-50">
                                 <label for="" class="form-label">Role</label>
                                 <select name="role"class="form-select">
-                                    <option value="" selected>Select Role</option>
+                                    <option value="">Select Role</option>
                                     @foreach ($roles as $role)
-                                        <option value="{{ $role }}" >{{ $role }}</option>
+                                        <option value="{{ $role }}" {{ old('role') == $role ? 'selected' : '' }} >{{ $role }}</option>
                                     @endforeach
                                 </select>
                                  @error('role')<span class="text-danger">{{ $message }}</span>@enderror
@@ -50,7 +50,7 @@
                             </div>
                             <div class="mb-3">
                                 <label for="" class="form-label">Phone Number</label>
-                                <input type="number" name="phoneNumber" class="form-control" placeholder="Phone Number">
+                                <input type="number" name="phoneNumber" value="{{ old('phoneNumber') }}" class="form-control" placeholder="Phone Number">
                                  @error('phoneNumber')<span class="text-danger">{{ $message }}</span>@enderror
                             </div>
                             <div class="">

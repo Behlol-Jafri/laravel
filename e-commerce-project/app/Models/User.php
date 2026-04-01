@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\Models\AccessControl;
 use App\Models\Category;
 use App\Models\Post;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -38,16 +37,6 @@ class User extends Authenticatable
     public function categories()
     {
         return $this->hasMany(Category::class);
-    }
-
-    public function accessGiven()
-    {
-        return $this->hasMany(AccessControl::class, 'granted_by');
-    }
-
-    public function accessReceived()
-    {
-        return $this->hasMany(AccessControl::class, 'granted_to');
     }
 
     public function getDobAttribute($value)

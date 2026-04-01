@@ -4,6 +4,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\PostController;
+use App\Http\Controllers\ProductController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SubCategoryController;
 use App\Http\Controllers\UserController;
@@ -49,5 +50,7 @@ Route::group(['middleware' => ['role:Super Admin|Admin|Vender|User'],'prefix' =>
     Route::resource('category', CategoryController::class);
     
     Route::resource('category.subCategory', SubCategoryController::class);
+
+    Route::resource('subCategory.product', ProductController::class);
 
 });

@@ -14,18 +14,21 @@
                     <th>Title</th>
                     <th>Description</th>
                     <th>User_Id</th>
-                    <th class="text-center" colspan="3">Actions</th>
+                    <th class="text-center" colspan="4">Actions</th>
                 </tr>
             </thead>
             <tbody>
                 @foreach ($categories as $index => $category)
-                <tr @can('view subCategory')
-                    onclick="window.location='{{ route('category.subCategory.index',$category) }}'"
-                @endcan>
+                <tr>
                     <td>{{ $index+1 }}</td>
                         <td>{{ ucwords($category->title) }}</td>
                         <td>{{ $category->description }}</td>
                         <td>{{ $category->user_id }}</td>
+                        @can('view subCategory')
+                            <td class="text-center">
+                                <a href="{{ route('category.subCategory.index',$category) }}" class="btn btn-primary">SubCategories</a>
+                            </td>
+                        @endcan
                         <td class="text-center"><a href="{{ route('category.show', $category->id) }}" class="btn btn-success"><i class="fa-solid fa-eye fa-sm"></i></a></td>
                         @can('update category')
                             <td class="text-center"><a href="{{ route('category.edit', $category->id) }}" class="btn btn-warning"><i class="fa-solid fa-pen-to-square fa-sm"></i></a></td>

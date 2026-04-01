@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="container-fluid">
-        <a href="{{ route('category.index') }}" class="text-danger text-center p-3 d-block text-decoration-none fs-3 fw-semibold">{{ ucwords($category->title) }}</a>
+        <a href="{{ route('category.index') }}" class="text-danger text-center p-3 d-block fs-3 fw-semibold">{{ ucwords($category->title) }}</a>
         @can('create subCategory')
             <a href="{{ route('category.subCategory.create',$category) }}" class="btn btn-primary mb-3" >Add Sub Category</a>
         @endcan
@@ -15,16 +15,21 @@
                     <th>Title</th>
                     <th>Description</th>
                     <th>Category_Id</th>
-                    <th class="text-center" colspan="3">Actions</th>
+                    <th class="text-center" colspan="4">Actions</th>
                 </tr>
             </thead>
             <tbody>
                 @foreach ($subCategories as $index => $subCategory)
-                        <tr>
+                    <tr>
                         <td>{{ $index+1 }}</td>
                         <td>{{ ucwords($subCategory->title) }}</td>
                         <td>{{ $subCategory->description }}</td>
                         <td>{{ $subCategory->category_id }}</td>
+                        @can('view product')
+                            <td class="text-center">
+                                <a href="{{ route('subCategory.product.index',$subCategory) }}" class="btn btn-primary">Products</a>
+                            </td>
+                        @endcan
                         <td class="text-center"><a href="{{ route('category.subCategory.show', [$category, $subCategory]) }}" class="btn btn-success"><i class="fa-solid fa-eye fa-sm"></i></a></td>
                         @can('update subCategory')
                             <td class="text-center"><a href="{{ route('category.subCategory.edit', [$category, $subCategory]) }}" class="btn btn-warning"><i class="fa-solid fa-pen-to-square fa-sm"></i></a></td>

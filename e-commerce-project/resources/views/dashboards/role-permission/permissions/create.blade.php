@@ -15,7 +15,7 @@
                             @csrf
                             <div class="mb-3">
                                 <label for="" class="form-label">Permission Name</label>
-                                <input type="text" name="name" class="form-control" placeholder="Enter Name">
+                                <input type="text" name="name" value="{{ old('name') }}" class="form-control" placeholder="Enter Name">
                                  @error('name')<span class="text-danger">{{ $message }}</span>@enderror
                             </div>
                             <div class="mb-3">
