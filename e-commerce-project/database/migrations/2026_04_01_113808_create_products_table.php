@@ -11,11 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('access_controls', function (Blueprint $table) {
+        Schema::create('products', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('granted_by')->references('id')->on('users')->cascadeOnDelete();
-            $table->foreignId('granted_to')->references('id')->on('users')->cascadeOnDelete();
-            $table->foreignId('target_user')->references('id')->on('users')->cascadeOnDelete();
             $table->timestamps();
         });
     }
@@ -25,6 +22,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('access_controls');
+        Schema::dropIfExists('products');
     }
 };

@@ -10,7 +10,7 @@
            <table class="table table-striped table-bordered">
             <thead>
                 <tr>
-                    <th>Id</th>
+                    <th>No.</th>
                     <th>Title</th>
                     <th>Description</th>
                     <th>User_Id</th>
@@ -21,7 +21,7 @@
                 @foreach ($posts as $index => $post)
                     <tr>
                         <td>{{ $index+1 }}</td>
-                        <td>{{ $post->title }}</td>
+                        <td>{{ ucwords($post->title) }}</td>
                         <td>{{ $post->description }}</td>
                         <td>{{ $post->user_id }}</td>
                         <td class="text-center"><a href="{{ route('posts.show', $post->id) }}" class="btn btn-success"><i class="fa-solid fa-eye fa-sm"></i></a></td>

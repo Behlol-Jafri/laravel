@@ -30,10 +30,8 @@
 
                                             <!-- Parent -->
                                             <label>
-                                                <!-- Checkbox (ONLY for checking) -->
                                                 <input type="checkbox" class="parent-checkbox" data-module="{{ $module }}">
                                                 
-                                                <!-- Text (ONLY for toggle) -->
                                                 <span class="toggle-group" data-module="{{ $module }}" style="cursor:pointer;">
                                                     <strong>{{ ucfirst($module) }}</strong>
                                                 </span>
@@ -81,7 +79,6 @@
     <script>
 document.addEventListener("DOMContentLoaded", function () {
 
-    // ✅ Function: update parent state
     function updateParent(module) {
         let children = document.querySelectorAll('.child-' + module);
         let parent = document.querySelector('.parent-checkbox[data-module="' + module + '"]');
@@ -98,7 +95,6 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 
-    // ✅ INIT: set parent state + auto open if needed
     document.querySelectorAll('.parent-checkbox').forEach(parent => {
         let module = parent.dataset.module;
         let children = document.querySelectorAll('.child-' + module);
@@ -106,7 +102,6 @@ document.addEventListener("DOMContentLoaded", function () {
         updateParent(module);
     });
 
-    // ✅ Parent checkbox click
     document.querySelectorAll('.parent-checkbox').forEach(parent => {
         parent.addEventListener('change', function () {
             let module = this.dataset.module;
@@ -122,7 +117,6 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     });
 
-    // ✅ Child change
     document.querySelectorAll('.child-checkbox').forEach(child => {
         child.addEventListener('change', function () {
             let module = this.dataset.module || this.className.split('child-')[1];
@@ -130,7 +124,6 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     });
 
-    // ✅ Toggle ONLY UI
     document.querySelectorAll('.toggle-group').forEach(toggle => {
         toggle.addEventListener('click', function (e) {
             e.preventDefault();

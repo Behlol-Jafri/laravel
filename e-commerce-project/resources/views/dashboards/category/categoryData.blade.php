@@ -10,7 +10,7 @@
            <table class="table table-striped table-bordered">
             <thead>
                 <tr>
-                    <th>Id</th>
+                    <th>No.</th>
                     <th>Title</th>
                     <th>Description</th>
                     <th>User_Id</th>
@@ -19,9 +19,11 @@
             </thead>
             <tbody>
                 @foreach ($categories as $index => $category)
-                        <tr>
-                        <td>{{ $index+1 }}</td>
-                        <td>{{ $category->title }}</td>
+                <tr @can('view subCategory')
+                    onclick="window.location='{{ route('category.subCategory.index',$category) }}'"
+                @endcan>
+                    <td>{{ $index+1 }}</td>
+                        <td>{{ ucwords($category->title) }}</td>
                         <td>{{ $category->description }}</td>
                         <td>{{ $category->user_id }}</td>
                         <td class="text-center"><a href="{{ route('category.show', $category->id) }}" class="btn btn-success"><i class="fa-solid fa-eye fa-sm"></i></a></td>
