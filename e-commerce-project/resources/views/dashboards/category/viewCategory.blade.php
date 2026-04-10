@@ -7,7 +7,7 @@
                         <h6 class="text-white bg-primary rounded p-2">View Category</h6>
                     </div>
                     <div class="card-body">
-                        <h6>Title : {{ ucwords($category->title) }}</h6>
+                        <h6>Title : {{ $category->title }}</h6>
                         <p>Description : {{ $category->description }}</p>
                         <p>User_Id : {{ $category->user_id }}</p>
                         <a href="{{ route('category.index') }}" class="btn btn-secondary">Back</a>

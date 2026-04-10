@@ -29,8 +29,8 @@ class UserController extends Controller implements HasMiddleware
     public function signup(Request $request)
     {
         $request->validate([
-            'firstName' => 'required|min:3|max:15',
-            'secondName' => 'required|min:3|max:15',
+            'firstName' => 'required|string|min:3|max:15',
+            'secondName' => 'required|string|min:3|max:15',
             'email' => 'required|email|unique:users,email',
             'password' => 'required|min:3',
             'dob' => 'required|date',
@@ -85,14 +85,14 @@ class UserController extends Controller implements HasMiddleware
     public function addUserForm()
     {
         $roles = Role::pluck('name', 'name')->all();
-        return view('dashboards.superAdmin.user.addUser', compact('roles'));
+        return view('dashboards.user.addUser', compact('roles'));
     }
 
     public function addUser(Request $request)
     {
         $request->validate([
-            'firstName' => 'required|min:3|max:15',
-            'secondName' => 'required|min:3|max:15',
+            'firstName' => 'required|string|min:3|max:15',
+            'secondName' => 'required|string|min:3|max:15',
             'email' => 'required|email|unique:users,email',
             'password' => 'required|min:3',
             'dob' => 'required|date',
@@ -110,34 +110,34 @@ class UserController extends Controller implements HasMiddleware
         ]);
         $user->assignRole($request->role);
 
-        return redirect()->route('users');
+        return redirect()->route('users')->with('status', 'User Add Successfully.');
     }
 
     public function usersData()
     {
         $users = User::all();
-        return view('dashboards.superAdmin.user.usersData', compact('users'));
+        return view('dashboards.user.usersData', compact('users'));
     }
 
     public function viewUser($id)
     {
         $user = User::findOrFail($id);
-        return view('dashboards.superAdmin.user.viewUser', compact('user'));
+        return view('dashboards.user.viewUser', compact('user'));
     }
 
     public function updateShowUser($id)
     {
         $user = User::findOrFail($id);
         $roles = Role::pluck('name', 'name')->all();
-        return view('dashboards.superAdmin.user.updateUser', compact('user', 'roles'));
+        return view('dashboards.user.updateUser', compact('user', 'roles'));
     }
 
     public function updateUser(Request $request, string $id)
     {
         $user = User::findOrFail($id);
         $request->validate([
-            'firstName' => 'required|min:3|max:15',
-            'secondName' => 'required|min:3|max:15',
+            'firstName' => 'required|string|min:3|max:15',
+            'secondName' => 'required|string|min:3|max:15',
             'email' => 'required|email',
             'dob' => 'required|date',
             'phoneNumber' => 'required|',
@@ -155,14 +155,14 @@ class UserController extends Controller implements HasMiddleware
         $user->assignRole($request->role);
 
 
-        return redirect()->route('users');
+        return redirect()->route('users')->with('status', 'User Updated Successfully.');
     }
 
     public function deleteUser($id)
     {
         $user = User::findOrFail($id);
         $user->delete();
-        return redirect()->route('users');
+        return redirect()->route('users')->with('status', 'User Deleted Successfully.');
     }
 
     public function addPermission(string $id)
@@ -197,9 +197,10 @@ class UserController extends Controller implements HasMiddleware
 
     public function userData()
     {
-        $users = User::whereDoesntHave('roles', function ($q) {
-            $q->where('name', 'Super Admin');
-        })->get();
+        // $users = User::whereDoesntHave('roles', function ($q) {
+        //     $q->where('name', 'Super Admin');
+        // })->get();
+        $users = User::all();
         return view('dashboards.role-permission.users.index', compact('users'));
     }
 }

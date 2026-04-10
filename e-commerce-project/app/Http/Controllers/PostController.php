@@ -35,8 +35,8 @@ class PostController extends Controller implements HasMiddleware
     public function store(Request $request)
     {
         $request->validate([
-            'title' => 'required|min:3|max:15',
-            'description' => 'required|min:15|max:50',
+            'title' => 'required|string|min:3|max:15',
+            'description' => 'required|string|min:5|max:50',
         ]);
 
         $post = Post::create([
@@ -45,7 +45,7 @@ class PostController extends Controller implements HasMiddleware
             'user_id' => Auth::user()->id,
         ]);
 
-        return redirect()->route('posts.index');
+        return redirect()->route('posts.index')->with('status', 'Post Add Successfully.');
     }
  
     public function show(string $id)
@@ -64,8 +64,8 @@ class PostController extends Controller implements HasMiddleware
     {
         $post = Post::findOrFail($id);
         $request->validate([
-            'title' => 'required|min:3|max:15',
-            'description' => 'required|min:15|max:50',
+            'title' => 'required|string|min:3|max:15',
+            'description' => 'required|string|min:5|max:50',
         ]);
 
 
@@ -76,13 +76,13 @@ class PostController extends Controller implements HasMiddleware
         ]);
 
 
-        return redirect()->route('posts.index');
+        return redirect()->route('posts.index')->with('status', 'Post Updated Successfully.');
     }
 
     public function destroy(string $id)
     {
         $post = Post::findOrFail($id);
         $post->delete();
-        return redirect()->route('posts.index');
+        return redirect()->route('posts.index')->with('status', 'Post Deleted Successfully.');
     }
 }

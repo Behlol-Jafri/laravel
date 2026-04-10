@@ -1,12 +1,15 @@
 @extends('home')
 
 @section('data')
-    <header class="bg-primary rounded d-flex justify-content-between text-white p-2 m-2">
+    <header class="bg-primary rounded d-flex justify-content-between align-items-center text-white p-2 m-2">
         <h5>{{ Auth::user()->getRoleNames()->first() }}, Dashboard</h5>
-        <form action="{{ route('logout') }}" method="post">
-            @csrf
-            <button class="btn btn-danger"><i class="fas fa-sign-out-alt me-2"></i>Logout</button>
-        </form>
+        <div class="d-flex align-items-center gap-3">
+            <h5>{{ Auth::user()->firstName }}</h5>
+            <form action="{{ route('logout') }}" method="post">
+                @csrf
+                <button class="btn btn-danger"><i class="fas fa-sign-out-alt me-2"></i>Logout</button>
+            </form>
+        </div>
     </header>
     <main style="height: calc(100vh - 50px);">
         

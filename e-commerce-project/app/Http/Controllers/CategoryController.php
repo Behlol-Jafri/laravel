@@ -36,8 +36,8 @@ class CategoryController extends Controller implements HasMiddleware
     public function store(Request $request)
     {
         $request->validate([
-            'title' => 'required|min:3|max:15',
-            'description' => 'required|min:15|max:50',
+            'title' => 'required|string|min:3|max:15',
+            'description' => 'required|string|min:5|max:50',
         ]);
 
         $category = Category::create([
@@ -46,7 +46,7 @@ class CategoryController extends Controller implements HasMiddleware
             'user_id' => Auth::user()->id,
         ]);
 
-        return redirect()->route('category.index');
+        return redirect()->route('category.index')->with('status', 'Category Add Successfully.');
     }
 
     public function show(string $id)
@@ -65,8 +65,8 @@ class CategoryController extends Controller implements HasMiddleware
     {
         $category = Category::findOrFail($id);
         $request->validate([
-            'title' => 'required|min:3|max:15',
-            'description' => 'required|min:15|max:50',
+            'title' => 'required|string|min:3|max:15',
+            'description' => 'required|string|min:5|max:50',
         ]);
 
 
@@ -77,13 +77,13 @@ class CategoryController extends Controller implements HasMiddleware
         ]);
 
 
-        return redirect()->route('category.index');
+        return redirect()->route('category.index')->with('status', 'Category Updated Successfully.');
     }
 
     public function destroy(string $id)
     {
         $category = Category::findOrFail($id);
         $category->delete();
-        return redirect()->route('category.index');
+        return redirect()->route('category.index')->with('status', 'Category Deleted Successfully.');
     }
 }

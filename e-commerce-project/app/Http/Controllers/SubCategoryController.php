@@ -22,8 +22,8 @@ class SubCategoryController extends Controller
     public function store(Request $request,Category $category)
     {
         $request->validate([
-            'title' => 'required|min:3|max:15',
-            'description' => 'required|min:15|max:50',
+            'title' => 'required|string|min:3|max:15',
+            'description' => 'required|string|min:5|max:50',
         ]);
         $subCategory = SubCategory::create([
             'title' => $request->title,
@@ -31,7 +31,7 @@ class SubCategoryController extends Controller
             'category_id' => $category->id,
         ]);
 
-        return redirect()->route('category.subCategory.index',$category);
+        return redirect()->route('category.subCategory.index',$category)->with('status', 'Sub Category Add Successfully.');
     }
 
     public function show(Category $category,SubCategory $subCategory)
@@ -47,8 +47,8 @@ class SubCategoryController extends Controller
     public function update(Request $request,Category $category,SubCategory $subCategory)
     {
         $request->validate([
-            'title' => 'required|min:3|max:15',
-            'description' => 'required|min:15|max:50',
+            'title' => 'required|string|min:3|max:15',
+            'description' => 'required|string|min:5|max:50',
         ]);
 
 
@@ -59,12 +59,12 @@ class SubCategoryController extends Controller
         ]);
 
 
-        return redirect()->route('category.subCategory.index',$category);
+        return redirect()->route('category.subCategory.index',$category)->with('status', 'Sub Category Updated Successfully.');
     }
 
     public function destroy(Category $category,SubCategory $subCategory)
     {
         $subCategory->delete();
-        return redirect()->route('category.subCategory.index',$category);
+        return redirect()->route('category.subCategory.index',$category)->with('status', 'Sub Category Deleted Successfully.');
     }
 }

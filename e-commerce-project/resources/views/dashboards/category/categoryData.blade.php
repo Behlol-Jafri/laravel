@@ -5,6 +5,9 @@
         @can('create category')
             <a href="{{ route('category.create') }}" class="btn btn-primary mb-3" >Add Category</a>
         @endcan
+        @if (session('status'))
+            <div class="alert alert-success">{{ session('status') }}</div>
+        @endif
         <div class="row">
             <h5 class="bg-primary text-white rounded p-2">Categories Data</h5>
            <table class="table table-striped table-bordered">
@@ -21,7 +24,7 @@
                 @foreach ($categories as $index => $category)
                 <tr>
                     <td>{{ $index+1 }}</td>
-                        <td>{{ ucwords($category->title) }}</td>
+                        <td>{{ $category->title }}</td>
                         <td>{{ $category->description }}</td>
                         <td>{{ $category->user_id }}</td>
                         @can('view subCategory')

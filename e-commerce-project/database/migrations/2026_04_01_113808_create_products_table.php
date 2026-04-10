@@ -16,7 +16,13 @@ return new class extends Migration
             $table->string('title');
             $table->longText('description');
             $table->string('price');
+            $table->string('quantity');
+            $table->foreignId('user_id')->references('id')->on('users')->cascadeOnDelete();
+            $table->foreignId('category_id')->references('id')->on('categories')->cascadeOnDelete();
             $table->foreignId('subCategory_id')->references('id')->on('sub_categories')->cascadeOnDelete();
+            $table->string('review_status')->default('pending');
+            $table->text('admin_message')->nullable();
+            $table->boolean('is_read')->default(false);
             $table->timestamps();
         });
     }

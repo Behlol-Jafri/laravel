@@ -23,6 +23,13 @@
             </a>
         </li>
         @endcan
+        @can('view product')
+        <li>
+             <a href="{{ route('product.index') }}" class="text-decoration-none text-black">
+                <span><i class="fas fa-tags me-2"></i>Products</span>
+            </a>
+        </li>
+        @endcan
         @if (!Auth::user()->hasRole('User'))
         @canany(['view role','view user'])
         <li>

@@ -5,6 +5,9 @@
         @can('create post')
         <a href="{{ route('posts.create') }}" class="btn btn-primary mb-3" >Add Post</a>
         @endcan
+        @if (session('status'))
+            <div class="alert alert-success">{{ session('status') }}</div>
+        @endif
         <div class="row">
             <h5 class="bg-primary text-white rounded p-2">Posts Data</h5>
            <table class="table table-striped table-bordered">
@@ -21,7 +24,7 @@
                 @foreach ($posts as $index => $post)
                     <tr>
                         <td>{{ $index+1 }}</td>
-                        <td>{{ ucwords($post->title) }}</td>
+                        <td>{{ $post->title }}</td>
                         <td>{{ $post->description }}</td>
                         <td>{{ $post->user_id }}</td>
                         <td class="text-center"><a href="{{ route('posts.show', $post->id) }}" class="btn btn-success"><i class="fa-solid fa-eye fa-sm"></i></a></td>

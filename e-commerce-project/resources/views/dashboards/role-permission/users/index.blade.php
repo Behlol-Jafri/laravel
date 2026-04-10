@@ -9,6 +9,9 @@
                     <div class="alert alert-success">{{ session('status') }}</div>
                 @endif
                 <div class="card">
+                    <div class="card-header">
+                        <h4>Users</h4>
+                    </div>
                     <div class="card-body">
                         <table class="table table-striped table-bordered">
                             <thead>

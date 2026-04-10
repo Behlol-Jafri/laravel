@@ -51,6 +51,14 @@ Route::group(['middleware' => ['role:Super Admin|Admin|Vender|User'],'prefix' =>
     
     Route::resource('category.subCategory', SubCategoryController::class);
 
-    Route::resource('subCategory.product', ProductController::class);
+    Route::resource('product', ProductController::class);
+   
+Route::post('/products/filter', [ProductController::class, 'filter'])->name('products.filter');
+
+Route::get('/products/deleteImage/{id}', [ProductController::class, 'deleteImage'])->name('deleteImage');
+
+Route::put('/products/review/{id}', [ProductController::class, 'review'])->name('review');
+
+Route::put('/products/reviewRead/{id}', [ProductController::class, 'reviewRead'])->name('reviewRead');
 
 });
