@@ -27,15 +27,21 @@
             <td class="text-center"><a href="{{ route('product.show', $product->id) }}" class="btn btn-success"><i class="fa-solid fa-eye fa-sm"></i></a></td>
             @if (Auth::user()->hasRole('Super Admin') || Auth::user()->hasRole('Admin'))
                 @if($product->review_status == 'pending')
-                    <td class="text-center"><a class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#reviewModal{{ $product->id }}">Review</a></td>
+                    <td class="text-center"><a class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#reviewModal{{ $product->id }}">Review</a></td>
                 @endif
                 @if($product->review_status != 'pending')
                     <td class="text-center"><a class="btn btn-warning">Reviewed</a></td>
                 @endif
             @endif
             @if (Auth::user()->hasRole('Vender'))
+                @if(!$product->is_read && $product->review_status == 'pending')
+                    <td class="text-center"><a class="btn btn-secondary">Review Pending</a></td>
+                @endif
                 @if(!$product->is_read && $product->review_status != 'pending')
                     <td class="text-center"><a class="btn btn-info" data-bs-toggle="modal" data-bs-target="#viewReview{{ $product->id }}">View Review</a></td>
+                @endif
+                @if($product->is_read && $product->review_status != 'pending')
+                    <td class="text-center"><a class="btn btn-primary">Viewed Review</a></td>
                 @endif
             @endif
             @can('update product')
@@ -73,6 +79,7 @@
                 </div>
 
                 <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancle</button>
                     <button type="submit" class="btn btn-success">Send Review</button>
                 </div>
             </div>
@@ -100,6 +107,7 @@
                 </div>
 
                 <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancle</button>
                     <button type="submit" class="btn btn-primary">Submit</button>
                 </div>
             </div>
