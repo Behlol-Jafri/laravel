@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Spatie\Permission\Models\Permission;
@@ -26,12 +27,30 @@ class RoleController extends Controller implements HasMiddleware
     public function index()
     {
         $roles = Role::get();
-        return view('dashboards.role-permission.roles.index', compact('roles'));
+        if (Auth::user()->hasRole('Super Admin')) {
+            return view('dashboards.super-admin.role-permission.roles.index', compact('roles'));
+        } elseif (Auth::user()->hasRole('Admin')) {
+            return view('dashboards.admin.role-permission.roles.index', compact('roles'));
+        } elseif (Auth::user()->hasRole('Vender')) {
+            return view('dashboards.vender.role-permission.roles.index', compact('roles'));
+        } elseif (Auth::user()->hasRole('User')) {
+            return view('dashboards.user.role-permission.roles.index', compact('roles'));
+        }
+        // return view('dashboards.role-permission.roles.index', compact('roles'));
     }
 
     public function create()
     {
-        return view('dashboards.role-permission.roles.create');
+        if (Auth::user()->hasRole('Super Admin')) {
+            return view('dashboards.super-admin.role-permission.roles.create',);
+        } elseif (Auth::user()->hasRole('Admin')) {
+            return view('dashboards.admin.role-permission.roles.create',);
+        } elseif (Auth::user()->hasRole('Vender')) {
+            return view('dashboards.vender.role-permission.roles.create',);
+        } elseif (Auth::user()->hasRole('User')) {
+            return view('dashboards.user.role-permission.roles.create',);
+        }
+        // return view('dashboards.role-permission.roles.create');
     }
 
     public function store(Request $request)
@@ -49,7 +68,16 @@ class RoleController extends Controller implements HasMiddleware
 
     public function edit(Role $role)
     {
-        return view('dashboards.role-permission.roles.edit', compact('role'));
+        if (Auth::user()->hasRole('Super Admin')) {
+            return view('dashboards.super-admin.role-permission.roles.edit', compact('role'));
+        } elseif (Auth::user()->hasRole('Admin')) {
+            return view('dashboards.admin.role-permission.roles.edit', compact('role'));
+        } elseif (Auth::user()->hasRole('Vender')) {
+            return view('dashboards.vender.role-permission.roles.edit', compact('role'));
+        } elseif (Auth::user()->hasRole('User')) {
+            return view('dashboards.user.role-permission.roles.edit', compact('role'));
+        }
+        // return view('dashboards.role-permission.roles.edit', compact('role'));
     }
 
     public function update(Request $request, Role $role)
@@ -83,7 +111,17 @@ class RoleController extends Controller implements HasMiddleware
             ->where('role_id', $role->id)
             ->pluck('permission_id', 'permission_id')
             ->all();
-        return view('dashboards.role-permission.roles.add-permission', compact('groupedPermissions','permissions', 'role', 'rolePermissions'));
+
+        if (Auth::user()->hasRole('Super Admin')) {
+            return view('dashboards.super-admin.role-permission.roles.add-permission', compact('groupedPermissions','permissions', 'role', 'rolePermissions'));
+        } elseif (Auth::user()->hasRole('Admin')) {
+            return view('dashboards.admin.role-permission.roles.add-permission', compact('groupedPermissions','permissions', 'role', 'rolePermissions'));
+        } elseif (Auth::user()->hasRole('Vender')) {
+            return view('dashboards.vender.role-permission.roles.add-permission', compact('groupedPermissions','permissions', 'role', 'rolePermissions'));
+        } elseif (Auth::user()->hasRole('User')) {
+            return view('dashboards.user.role-permission.roles.add-permission', compact('groupedPermissions','permissions', 'role', 'rolePermissions'));
+        }
+        // return view('dashboards.role-permission.roles.add-permission', compact('groupedPermissions','permissions', 'role', 'rolePermissions'));
     }
 
     public function givePermission(Request $request, string $id)

@@ -19,18 +19,36 @@ class ProductController extends Controller
         $categories = Category::all();
         $subCategories = SubCategory::all();
         if (Auth::user()->hasRole('Vender')) {
-            $products = Product::where('user_id', Auth::user()->id)->orderBy('id', 'desc')->paginate(10);
+            $products = Product::where('user_id', Auth::user()->id)->orderBy('id', 'desc')->paginate(9);
         } else {
-            $products = Product::orderBy('id', 'desc')->paginate(10);
+            $products = Product::orderBy('id', 'desc')->paginate(9);
         }
-        return view('dashboards.product.productData', compact('products', 'users', 'categories', 'subCategories'));
+        if (Auth::user()->hasRole('Super Admin')) {
+            return view('dashboards.super-admin.product.productData', compact('products', 'users', 'categories', 'subCategories'));
+        } elseif (Auth::user()->hasRole('Admin')) {
+            return view('dashboards.admin.product.productData', compact('products', 'users', 'categories', 'subCategories'));
+        } elseif (Auth::user()->hasRole('Vender')) {
+            return view('dashboards.vender.product.productData', compact('products', 'users', 'categories', 'subCategories'));
+        } elseif (Auth::user()->hasRole('User')) {
+            return view('dashboards.user.product.productData', compact('products', 'users', 'categories', 'subCategories'));
+        }
+        // return view('dashboards.product.productData', compact('products', 'users', 'categories', 'subCategories'));
     }
 
     public function create()
     {
         $categories = Category::all();
         $subCategories = SubCategory::all();
-        return view('dashboards.product.addProduct', compact('categories', 'subCategories'));
+        if (Auth::user()->hasRole('Super Admin')) {
+            return view('dashboards.super-admin.product.addProduct', compact('categories', 'subCategories'));
+        } elseif (Auth::user()->hasRole('Admin')) {
+            return view('dashboards.admin.product.addProduct', compact('categories', 'subCategories'));
+        } elseif (Auth::user()->hasRole('Vender')) {
+            return view('dashboards.vender.product.addProduct', compact('categories', 'subCategories'));
+        } elseif (Auth::user()->hasRole('User')) {
+            return view('dashboards.user.product.addProduct', compact('categories', 'subCategories'));
+        }
+        // return view('dashboards.product.addProduct', compact('categories', 'subCategories'));
     }
 
     public function store(Request $request)
@@ -78,7 +96,16 @@ class ProductController extends Controller
     {
         $product = Product::findOrFail($id);
         Gate::authorize('view', $product);
-        return view('dashboards.product.viewProduct', compact('product'));
+        if (Auth::user()->hasRole('Super Admin')) {
+            return view('dashboards.super-admin.product.viewProduct', compact('product'));
+        } elseif (Auth::user()->hasRole('Admin')) {
+            return view('dashboards.admin.product.viewProduct', compact('product'));
+        } elseif (Auth::user()->hasRole('Vender')) {
+            return view('dashboards.vender.product.viewProduct', compact('product'));
+        } elseif (Auth::user()->hasRole('User')) {
+            return view('dashboards.user.product.viewProduct', compact('product'));
+        }
+        // return view('dashboards.product.viewProduct', compact('product'));
     }
 
     public function edit(string $id)
@@ -86,7 +113,16 @@ class ProductController extends Controller
         $product = Product::findOrFail($id);
         $categories = Category::all();
         $subCategories = SubCategory::all();
-        return view('dashboards.product.updateProduct', compact('product', 'categories', 'subCategories'));
+        if (Auth::user()->hasRole('Super Admin')) {
+            return view('dashboards.super-admin.product.updateProduct', compact('product','categories', 'subCategories'));
+        } elseif (Auth::user()->hasRole('Admin')) {
+            return view('dashboards.admin.product.updateProduct', compact('product','categories', 'subCategories'));
+        } elseif (Auth::user()->hasRole('Vender')) {
+            return view('dashboards.vender.product.updateProduct', compact('product','categories', 'subCategories'));
+        } elseif (Auth::user()->hasRole('User')) {
+            return view('dashboards.user.product.updateProduct', compact('product','categories', 'subCategories'));
+        }
+        // return view('dashboards.product.updateProduct', compact('product', 'categories', 'subCategories'));
     }
 
     public function update(Request $request, string $id,)
@@ -172,28 +208,68 @@ class ProductController extends Controller
     {
         $query = Product::query();
 
-        if (Auth::user()->hasRole('Vender')) {
-            $query->where('user_id', Auth::user()->id);
-        } else {
-            $query->when($request->venderId, function ($q) use ($request) {
-                $q->where('user_id', $request->venderId);
+        if(Auth::user()->hasRole('User')){
+            if (!empty($request->categoryIds)) {
+                $query->whereIn('category_id', $request->categoryIds);
+            }
+
+            if (!empty($request->subCategoryIds)) {
+                $query->whereIn('subCategory_id', $request->subCategoryIds);
+            }
+            if ($request->priceRanges) {
+                $query->where(function ($q) use ($request) {
+                    foreach ($request->priceRanges as $range) {
+                        if (str_contains($range, '+')) {
+                            $min = (int) str_replace('+', '', $range);
+                            $q->orWhere('price', '>=', $min);
+                        } 
+                        else {
+                            [$min, $max] = explode('-', $range);
+                            $q->orWhereBetween('price', [(int)$min, (int)$max]);
+                        }
+                    }
+                });
+            }
+        } else{
+            if (Auth::user()->hasRole('Vender')) {
+                $query->where('user_id', Auth::user()->id);
+            } else {
+                $query->when($request->venderId, function ($q) use ($request) {
+                    $q->where('user_id', $request->venderId);
+                });
+            }
+
+            $query->when($request->categoryId, function ($q) use ($request) {
+                $q->where('category_id', $request->categoryId);
+            });
+
+            $query->when($request->subCategoryId, function ($q) use ($request) {
+                $q->where('subCategory_id', $request->subCategoryId);
             });
         }
 
-        $query->when($request->categoryId, function ($q) use ($request) {
-            $q->where('category_id', $request->categoryId);
-        });
+        $products = $query->orderBy('id', 'desc')->paginate(9);
 
-        $query->when($request->subCategoryId, function ($q) use ($request) {
-            $q->where('subCategory_id', $request->subCategoryId);
-        });
+         if (Auth::user()->hasRole('Super Admin')) {
+            $viewTable = 'dashboards.super-admin.product.productTable';
+            $viewPagination = 'dashboards.super-admin.product.pagination';
+        } elseif (Auth::user()->hasRole('Admin')) {
+            $viewTable = 'dashboards.admin.product.productTable';
+            $viewPagination = 'dashboards.admin.product.pagination';
+        } elseif (Auth::user()->hasRole('Vender')) {
+            $viewTable = 'dashboards.vender.product.productTable';
+            $viewPagination = 'dashboards.vender.product.pagination';
+        } elseif (Auth::user()->hasRole('User')) {
+            $viewTable = 'dashboards.user.product.productTable';
+            $viewPagination = 'dashboards.user.product.pagination';
+        }
 
-        $products = $query->orderBy('id', 'desc')->paginate(10);
 
         return response()->json([
-            'html' => view('dashboards.product.productTable', compact('products'))->render(),
-            'pagination' => view('dashboards.product.pagination', compact('products'))->render(),
-            'count' => $products->total(),
+            'html' => view($viewTable, compact('products'))->render(),
+            'pagination' => $products->links()->toHtml(),
+            'currentCount' => $products->count(),
+            'total' => $products->total(),
         ]);
     }
 

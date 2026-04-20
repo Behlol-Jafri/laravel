@@ -3,8 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-// use Illuminate\Routing\Controllers\HasMiddleware;
-// use Illuminate\Routing\Controllers\Middleware;
+use Illuminate\Support\Facades\Auth;
 use Spatie\Permission\Models\Permission;
 
 class PermissionController extends Controller 
@@ -25,12 +24,30 @@ class PermissionController extends Controller
     public function index()
     {
         $permissions = Permission::get();
-        return view('dashboards.role-permission.permissions.index', compact('permissions'));
+        if (Auth::user()->hasRole('Super Admin')) {
+            return view('dashboards.super-admin.role-permission.permissions.index', compact('permissions'));
+        } elseif (Auth::user()->hasRole('Admin')) {
+            return view('dashboards.admin.role-permission.permissions.index', compact('permissions'));
+        } elseif (Auth::user()->hasRole('Vender')) {
+            return view('dashboards.vender.role-permission.permissions.index', compact('permissions'));
+        } elseif (Auth::user()->hasRole('User')) {
+            return view('dashboards.user.role-permission.permissions.index', compact('permissions'));
+        }
+        // return view('dashboards.role-permission.permissions.index', compact('permissions'));
     }
 
     public function create()
     {
-        return view('dashboards.role-permission.permissions.create');
+         if (Auth::user()->hasRole('Super Admin')) {
+            return view('dashboards.super-admin.role-permission.permissions.create');
+        } elseif (Auth::user()->hasRole('Admin')) {
+            return view('dashboards.admin.role-permission.permissions.create');
+        } elseif (Auth::user()->hasRole('Vender')) {
+            return view('dashboards.vender.role-permission.permissions.create');
+        } elseif (Auth::user()->hasRole('User')) {
+            return view('dashboards.user.role-permission.permissions.create');
+        }
+        // return view('dashboards.role-permission.permissions.create');
     }
 
     public function store(Request $request)
@@ -48,7 +65,16 @@ class PermissionController extends Controller
 
     public function edit(Permission $permission)
     {
-        return view('dashboards.role-permission.permissions.edit', compact('permission'));
+         if (Auth::user()->hasRole('Super Admin')) {
+            return view('dashboards.super-admin.role-permission.permissions.edit', compact('permission'));
+        } elseif (Auth::user()->hasRole('Admin')) {
+            return view('dashboards.admin.role-permission.permissions.edit', compact('permission'));
+        } elseif (Auth::user()->hasRole('Vender')) {
+            return view('dashboards.vender.role-permission.permissions.edit', compact('permission'));
+        } elseif (Auth::user()->hasRole('User')) {
+            return view('dashboards.user.role-permission.permissions.edit', compact('permission'));
+        }
+        // return view('dashboards.role-permission.permissions.edit', compact('permission'));
     }
 
     public function update(Request $request, Permission $permission)

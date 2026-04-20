@@ -24,12 +24,30 @@ class PostController extends Controller implements HasMiddleware
     public function index()
     {
         $posts = Post::all();
-        return view('dashboards.posts.postsData', compact('posts'));
+        if (Auth::user()->hasRole('Super Admin')) {
+            return view('dashboards.super-admin.posts.postsData', compact('posts'));
+        } elseif (Auth::user()->hasRole('Admin')) {
+            return view('dashboards.admin.posts.postsData', compact('posts'));
+        } elseif (Auth::user()->hasRole('Vender')) {
+            return view('dashboards.vender.posts.postsData', compact('posts'));
+        } elseif (Auth::user()->hasRole('User')) {
+            return view('dashboards.user.posts.postsData', compact('posts'));
+        }
+        // return view('dashboards.posts.postsData', compact('posts'));
     }
 
     public function create()
     {
-        return view('dashboards.posts.addPost');
+        if (Auth::user()->hasRole('Super Admin')) {
+            return view('dashboards.super-admin.posts.addPost');
+        } elseif (Auth::user()->hasRole('Admin')) {
+            return view('dashboards.admin.posts.addPost');
+        } elseif (Auth::user()->hasRole('Vender')) {
+            return view('dashboards.vender.posts.addPost');
+        } elseif (Auth::user()->hasRole('User')) {
+            return view('dashboards.user.posts.addPost');
+        }
+        // return view('dashboards.posts.addPost');
     }
 
     public function store(Request $request)
@@ -51,13 +69,31 @@ class PostController extends Controller implements HasMiddleware
     public function show(string $id)
     {
         $post = Post::findOrFail($id);
-        return view('dashboards.posts.viewPost', compact('post'));
+        if (Auth::user()->hasRole('Super Admin')) {
+            return view('dashboards.super-admin.posts.viewPost', compact('post'));
+        } elseif (Auth::user()->hasRole('Admin')) {
+            return view('dashboards.admin.posts.viewPost', compact('post'));
+        } elseif (Auth::user()->hasRole('Vender')) {
+            return view('dashboards.vender.posts.viewPost', compact('post'));
+        } elseif (Auth::user()->hasRole('User')) {
+            return view('dashboards.user.posts.viewPost', compact('post'));
+        }
+        // return view('dashboards.posts.viewPost', compact('post'));
     }
 
     public function edit(string $id)
     {
         $post = Post::findOrFail($id);
-        return view('dashboards.posts.updatePost', compact('post'));
+        if (Auth::user()->hasRole('Super Admin')) {
+            return view('dashboards.super-admin.posts.updatePost', compact('post'));
+        } elseif (Auth::user()->hasRole('Admin')) {
+            return view('dashboards.admin.posts.updatePost', compact('post'));
+        } elseif (Auth::user()->hasRole('Vender')) {
+            return view('dashboards.vender.posts.updatePost', compact('post'));
+        } elseif (Auth::user()->hasRole('User')) {
+            return view('dashboards.user.posts.updatePost', compact('post'));
+        }
+        // return view('dashboards.posts.updatePost', compact('post'));
     }
 
     public function update(Request $request, string $id)

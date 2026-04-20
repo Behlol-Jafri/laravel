@@ -1,0 +1,45 @@
+.btn-hover{
+    background-color: white;
+    transition: 0.3s;
+}
+.btn-hover:hover{
+    background-color: blue;
+    color: white;
+    transition: 0.3s;
+}
+.product-card{
+    transition: 0.3s;
+}
+.product-card:hover{
+    transform: scale(1.03);
+    transition: 0.3s;
+}
+.card-header div:first-child{
+    transition: 0.3s;
+}
+.card-header div:first-child:hover{
+    transform: scale(1.03);
+    transition: 0.3s;
+}
+.checkbox:checked + .text {
+    color: blue;
+    font-weight: 500;
+}
+.category-dropdown{
+    display: none;
+}
+.subCategory-dropdown{
+    display: none;
+}
+.price-dropdown{
+    display: none;
+}
+.angle-category{
+    transition: 0.3s;
+}
+.angle-subCategory{
+    transition: 0.3s;
+}
+.angle-price{
+    transition: 0.3s;
+}

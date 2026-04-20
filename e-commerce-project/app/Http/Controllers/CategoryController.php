@@ -11,10 +11,10 @@ use Illuminate\Support\Facades\Auth;
 class CategoryController extends Controller implements HasMiddleware
 {
 
-      public static function middleware(): array
+    public static function middleware(): array
     {
         return [
-            new Middleware('permission:view category', only: ['index','show']),
+            new Middleware('permission:view category', only: ['index', 'show']),
             new Middleware('permission:create category', only: ['create', 'store']),
             new Middleware('permission:update category', only: ['edit', 'update']),
             new Middleware('permission:delete category', only: ['destroy']),
@@ -25,12 +25,30 @@ class CategoryController extends Controller implements HasMiddleware
     public function index()
     {
         $categories = Category::all();
-        return view('dashboards.category.categoryData', compact('categories'));
+        if (Auth::user()->hasRole('Super Admin')) {
+            return view('dashboards.super-admin.category.categoryData', compact('categories'));
+        } elseif (Auth::user()->hasRole('Admin')) {
+            return view('dashboards.admin.category.categoryData', compact('categories'));
+        } elseif (Auth::user()->hasRole('Vender')) {
+            return view('dashboards.vender.category.categoryData', compact('categories'));
+        } elseif (Auth::user()->hasRole('User')) {
+            return view('dashboards.user.category.categoryData', compact('categories'));
+        }
+        // return view('dashboards.category.categoryData', compact('categories'));
     }
 
     public function create()
     {
-        return view('dashboards.category.addCategory');
+        if (Auth::user()->hasRole('Super Admin')) {
+            return view('dashboards.super-admin.category.addCategory');
+        } elseif (Auth::user()->hasRole('Admin')) {
+            return view('dashboards.admin.category.addCategory');
+        } elseif (Auth::user()->hasRole('Vender')) {
+            return view('dashboards.vender.category.addCategory');
+        } elseif (Auth::user()->hasRole('User')) {
+            return view('dashboards.user.category.addCategory');
+        }
+        // return view('dashboards.category.addCategory');
     }
 
     public function store(Request $request)
@@ -52,13 +70,31 @@ class CategoryController extends Controller implements HasMiddleware
     public function show(string $id)
     {
         $category = Category::findOrFail($id);
-        return view('dashboards.category.viewCategory', compact('category'));
+        if (Auth::user()->hasRole('Super Admin')) {
+            return view('dashboards.super-admin.category.viewCategory', compact('category'));
+        } elseif (Auth::user()->hasRole('Admin')) {
+            return view('dashboards.admin.category.viewCategory', compact('category'));
+        } elseif (Auth::user()->hasRole('Vender')) {
+            return view('dashboards.vender.category.viewCategory', compact('category'));
+        } elseif (Auth::user()->hasRole('User')) {
+            return view('dashboards.user.category.viewCategory', compact('category'));
+        }
+        // return view('dashboards.category.viewCategory', compact('category'));
     }
 
     public function edit(string $id)
     {
         $category = Category::findOrFail($id);
-        return view('dashboards.category.updateCategory', compact('category'));
+        if (Auth::user()->hasRole('Super Admin')) {
+            return view('dashboards.super-admin.category.updateCategory', compact('category'));
+        } elseif (Auth::user()->hasRole('Admin')) {
+            return view('dashboards.admin.category.updateCategory', compact('category'));
+        } elseif (Auth::user()->hasRole('Vender')) {
+            return view('dashboards.vender.category.updateCategory', compact('category'));
+        } elseif (Auth::user()->hasRole('User')) {
+            return view('dashboards.user.category.updateCategory', compact('category'));
+        }
+        // return view('dashboards.category.updateCategory', compact('category'));
     }
 
     public function update(Request $request, string $id)

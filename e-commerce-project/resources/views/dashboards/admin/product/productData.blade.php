@@ -10,7 +10,6 @@
         @endif
         <div class="row">
             <div class="row mb-3">
-                @if (Auth::user()->hasRole('Super Admin') || Auth::user()->hasRole('Admin'))
                     <div class="col">
                         <select name="vender_id" id="vender" class="form-select">
                             <option value="">All Vender</option>
@@ -21,7 +20,6 @@
                             @endforeach
                         </select>
                     </div>
-                @endif
                 <div class="col">
                     <select name="category_id" id="category" class="form-select">
                         <option value="">All Category</option>
@@ -58,14 +56,14 @@
                 </tr>
             </thead>
             <tbody id="tblBody">
-                @include('dashboards.product.productTable')
+                @include('dashboards.admin.product.productTable')
             </tbody>
            </table>
         </div>
     </div>
 <div class="d-flex justify-content-between">
     <div id="productCount">
-        Total Products : {{ $products->total() }}
+        Showing {{ $products->count() }} out of {{ $products->total() }} products
     </div>
     <div id="paginationLinks">
         {{ $products->links() }}
@@ -112,7 +110,7 @@
         .then(data =>{
             document.getElementById('tblBody').innerHTML = data.html;
             document.getElementById('paginationLinks').innerHTML = data.pagination;
-            document.getElementById('productCount').innerText = 'Total Products : ' + data.count;
+            document.getElementById('productCount').innerText = `Showing ${data.currentCount} out of ${data.total} products`;
         })
     }
 
@@ -128,9 +126,7 @@
 }); 
 
 
-    if(venderSelect){
-        venderSelect.addEventListener('change', filterProducts);
-    }
+    venderSelect.addEventListener('change', filterProducts);
     categorySelect.addEventListener('change', filterProducts);
     subCategorySelect.addEventListener('change', filterProducts);
 </script>

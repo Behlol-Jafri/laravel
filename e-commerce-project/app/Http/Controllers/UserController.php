@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
+use App\Models\SubCategory;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controllers\HasMiddleware;
@@ -68,8 +70,13 @@ class UserController extends Controller implements HasMiddleware
 
     public function dashboard()
     {
+        $categories = Category::all();
+        $subCategories = SubCategory::all();
         if (!Auth::check()) {
             return redirect()->route('loginForm');
+        }
+        if(Auth::user()->hasRole('User')){
+            return redirect()->route('product.index');
         }
         return view('dashboards.dashboardLayout');
     }
@@ -85,7 +92,16 @@ class UserController extends Controller implements HasMiddleware
     public function addUserForm()
     {
         $roles = Role::pluck('name', 'name')->all();
-        return view('dashboards.user.addUser', compact('roles'));
+        if (Auth::user()->hasRole('Super Admin')) {
+            return view('dashboards.super-admin.user.addUser', compact('roles'));
+        } elseif (Auth::user()->hasRole('Admin')) {
+            return view('dashboards.admin.user.addUser', compact('roles'));
+        }elseif (Auth::user()->hasRole('Vender')) {
+            return view('dashboards.vender.user.addUser', compact('roles'));
+        }elseif (Auth::user()->hasRole('User')) {
+            return view('dashboards.user.user.addUser', compact('roles'));
+        }
+        // return view('dashboards.user.addUser', compact('roles'));
     }
 
     public function addUser(Request $request)
@@ -116,20 +132,47 @@ class UserController extends Controller implements HasMiddleware
     public function usersData()
     {
         $users = User::all();
-        return view('dashboards.user.usersData', compact('users'));
+        if (Auth::user()->hasRole('Super Admin')) {
+            return view('dashboards.super-admin.user.usersData', compact('users'));
+        } elseif (Auth::user()->hasRole('Admin')) {
+            return view('dashboards.admin.user.usersData', compact('users'));
+        }elseif (Auth::user()->hasRole('Vender')) {
+            return view('dashboards.vender.user.usersData', compact('users'));
+        }elseif (Auth::user()->hasRole('User')) {
+            return view('dashboards.user.user.usersData', compact('users'));
+        }
+        // return view('dashboards.user.usersData', compact('users'));
     }
 
     public function viewUser($id)
     {
         $user = User::findOrFail($id);
-        return view('dashboards.user.viewUser', compact('user'));
+        if (Auth::user()->hasRole('Super Admin')) {
+            return view('dashboards.super-admin.user.viewUser', compact('user'));
+        } elseif (Auth::user()->hasRole('Admin')) {
+            return view('dashboards.admin.user.viewUser', compact('user'));
+        }elseif (Auth::user()->hasRole('Vender')) {
+            return view('dashboards.vender.user.viewUser', compact('user'));
+        }elseif (Auth::user()->hasRole('User')) {
+            return view('dashboards.user.user.viewUser', compact('user'));
+        }
+        // return view('dashboards.user.viewUser', compact('user'));
     }
 
     public function updateShowUser($id)
     {
         $user = User::findOrFail($id);
         $roles = Role::pluck('name', 'name')->all();
-        return view('dashboards.user.updateUser', compact('user', 'roles'));
+        if (Auth::user()->hasRole('Super Admin')) {
+            return view('dashboards.super-admin.user.updateUser', compact('user','roles'));
+        } elseif (Auth::user()->hasRole('Admin')) {
+            return view('dashboards.admin.user.updateUser', compact('user','roles'));
+        }elseif (Auth::user()->hasRole('Vender')) {
+            return view('dashboards.vender.user.updateUser', compact('user','roles'));
+        }elseif (Auth::user()->hasRole('User')) {
+            return view('dashboards.user.user.updateUser', compact('user','roles'));
+        }
+        // return view('dashboards.user.updateUser', compact('user', 'roles'));
     }
 
     public function updateUser(Request $request, string $id)
@@ -181,7 +224,17 @@ class UserController extends Controller implements HasMiddleware
             ->where('model_id', $user->id)
             ->pluck('permission_id', 'permission_id')
             ->all();
-        return view('dashboards.role-permission.users.add-permission', compact('groupedPermissions','permissions', 'user', 'rolePermissions', 'userPermissions'));
+
+        if (Auth::user()->hasRole('Super Admin')) {
+            return view('dashboards.super-admin.role-permission.users.add-permission', compact('groupedPermissions', 'permissions', 'user', 'rolePermissions', 'userPermissions'));
+        } elseif (Auth::user()->hasRole('Admin')) {
+            return view('dashboards.admin.role-permission.users.add-permission', compact('groupedPermissions', 'permissions', 'user', 'rolePermissions', 'userPermissions'));
+        }elseif (Auth::user()->hasRole('Vender')) {
+            return view('dashboards.vender.role-permission.users.add-permission', compact('groupedPermissions', 'permissions', 'user', 'rolePermissions', 'userPermissions'));
+        }elseif (Auth::user()->hasRole('User')) {
+            return view('dashboards.user.role-permission.users.add-permission', compact('groupedPermissions', 'permissions', 'user', 'rolePermissions', 'userPermissions'));
+        }    
+        // return view('dashboards.role-permission.users.add-permission', compact('groupedPermissions', 'permissions', 'user', 'rolePermissions', 'userPermissions'));
     }
 
     public function givePermission(Request $request, string $id)
@@ -201,6 +254,15 @@ class UserController extends Controller implements HasMiddleware
         //     $q->where('name', 'Super Admin');
         // })->get();
         $users = User::all();
-        return view('dashboards.role-permission.users.index', compact('users'));
+        if (Auth::user()->hasRole('Super Admin')) {
+            return view('dashboards.super-admin.role-permission.users.index', compact('users'));
+        } elseif (Auth::user()->hasRole('Admin')) {
+            return view('dashboards.admin.role-permission.users.index', compact('users'));
+        }elseif (Auth::user()->hasRole('Vender')) {
+            return view('dashboards.vender.role-permission.users.index', compact('users'));
+        }elseif (Auth::user()->hasRole('User')) {
+            return view('dashboards.user.role-permission.users.index', compact('users'));
+        }
+        // return view('dashboards.role-permission.users.index', compact('users'));
     }
 }
