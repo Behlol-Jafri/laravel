@@ -1,11 +1,18 @@
 .btn-hover{
     background-color: white;
-    transition: 0.3s;
+    color: black;
+    border: 1px solid black;
+    border-radius: 5px;
+    padding: 8px;
+    width: 100%;
+    text-align: center;
+    transition: 0.5s;
 }
 .btn-hover:hover{
     background-color: blue;
     color: white;
-    transition: 0.3s;
+    border: none;
+    transition: 0.5s;
 }
 .product-card{
     transition: 0.3s;
@@ -42,4 +49,27 @@
 }
 .angle-price{
     transition: 0.3s;
+}
+
+.cart-img {
+    transition: 0.3s;
+}
+.cart-img:hover{
+    transform: scale(1.03);
+    transition: 0.3s;
+}
+
+.circle {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    margin: 0 auto 5px;
+}
+
+
+.custom-scroll::-webkit-scrollbar {
+    display: none;
+}
+.custom-scroll {
+    scrollbar-width: none;
 }

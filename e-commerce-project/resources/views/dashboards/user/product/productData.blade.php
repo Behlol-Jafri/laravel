@@ -1,4 +1,4 @@
-@extends('dashboards.dashboardLayout')
+@extends('dashboards.user.userDashboard')
 
 @section('content')
 
@@ -64,23 +64,12 @@
             </div>
             <div class="col ">
                 <div class="container-fluid">
-                    @can('create product')
-                        <a href="{{ route('product.create') }}" class="btn btn-primary mb-3" >Add Product</a>
-                    @endcan
-                    @if (session('status'))
-                        <div class="alert alert-success">{{ session('status') }}</div>
-                    @endif
-                    <h5 class="bg-primary text-white rounded p-2">Product Data</h5>
+                    <h5 class="">Product Data</h5>
                     <div class="row" id="cardBody">
                             @include('dashboards.user.product.productTable')
                     </div>
-                </div>
-                <div class="d-flex justify-content-between">
-                    <div id="productCount">
-                        Showing {{ $products->count() }} out of {{ $products->total() }} products
-                    </div>
-                    <div id="paginationLinks">
-                        {{ $products->links() }}
+                    <div id="loading" style="display:none; text-align:center; padding:20px;">
+                        Loading...
                     </div>
                 </div>
             </div>  
@@ -90,55 +79,87 @@
     </main>
 
 
-    
+    <script>
 
+    let offset = 5;
+    let isLoading = false;
+    let hasMore = true;
+    let activeFilters = { categoryIds: [], subCategoryIds: [], priceRanges: [] };
+    let isFiltered = false;
 
-<script>
+    window.addEventListener('scroll', function () {
+        if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 50) {
+            loadMore();
+        }
+    });
 
+    function loadMore() {
+        if (!hasMore || isLoading) return;
 
-    function filterProducts(page = 1) {
-        let categoryIds = [];
-        let subCategoryIds = [];
-        let priceRanges = [];
+        isLoading = true;
+        document.getElementById('loading').style.display = 'block';
 
-        document.querySelectorAll('.category-checkbox:checked').forEach(el => {
-            categoryIds.push(el.value);
-        });
+        let fetchPromise;
 
-        document.querySelectorAll('.subcategory-checkbox:checked').forEach(el => {
-            subCategoryIds.push(el.value);
-        });
+        if (isFiltered) {
+            fetchPromise = fetch("{{ route('filter') }}", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                },
+                body: JSON.stringify({ ...activeFilters, offset: offset })
+            });
+        } else {
+            fetchPromise = fetch(`{{ url()->current() }}?offset=${offset}`, {
+                headers: { 'X-Requested-With': 'XMLHttpRequest' }
+            });
+        }
 
-        document.querySelectorAll('.price-checkbox:checked').forEach(el => {
-            priceRanges.push(el.value);
-        });
+        fetchPromise
+            .then(res => res.json())
+            .then(data => {
+                document.getElementById('cardBody').insertAdjacentHTML('beforeend', data.html);
+                offset += 5;
+                hasMore = data.hasMore;
+                isLoading = false;
+                document.getElementById('loading').style.display = 'none';
+            })
+            .catch(() => {
+                isLoading = false;
+                document.getElementById('loading').style.display = 'none';
+            });
+    }
 
-        let ids = {
-            page: page,
-            categoryIds: categoryIds,
-            subCategoryIds: subCategoryIds,
-            priceRanges: priceRanges
-        };
+    function filterProducts() {
+        let categoryIds = [...document.querySelectorAll('.category-checkbox:checked')].map(el => el.value);
+        let subCategoryIds = [...document.querySelectorAll('.subcategory-checkbox:checked')].map(el => el.value);
+        let priceRanges = [...document.querySelectorAll('.price-checkbox:checked')].map(el => el.value);
 
+        activeFilters = { categoryIds, subCategoryIds, priceRanges };
+        isFiltered = categoryIds.length > 0 || subCategoryIds.length > 0 || priceRanges.length > 0;
 
-        fetch("{{ route('products.filter') }}",{
+        offset = 5;
+        hasMore = true;
+
+        fetch("{{ route('filter') }}", {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
                 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
             },
-            body: JSON.stringify(ids)
+            body: JSON.stringify({ ...activeFilters, offset: 0 })
         })
         .then(response => response.json())
-        .then(data =>{
+        .then(data => {
             document.getElementById('cardBody').innerHTML = data.html;
-            document.getElementById('paginationLinks').innerHTML = data.pagination;
-            document.getElementById('productCount').innerText = `Showing ${data.currentCount} out of ${data.total} products`;
-        })
+            hasMore = data.hasMore;
+        });
     }
 
     document.addEventListener('change', function(e) {
-        if (e.target.classList.contains('category-checkbox') || 
+        if (
+            e.target.classList.contains('category-checkbox') ||
             e.target.classList.contains('subcategory-checkbox') ||
             e.target.classList.contains('price-checkbox')
         ) {
@@ -146,51 +167,18 @@
         }
     });
 
-    let category = document.querySelector('#category');
-    category.addEventListener('click', function(){
-        let categoryDropdown = document.querySelector('.category-dropdown');
-        let angleCategory = document.querySelector('.angle-category');
-        if(categoryDropdown.style.display === "block"){
-            categoryDropdown.style.display = "none"
-            angleCategory.style.transform = 'rotate(0deg)'
-            angleCategory.style.transition = '0.3s'
-        }else{
-            categoryDropdown.style.display = "block"
-            angleCategory.style.transform = 'rotate(180deg)'
-            angleCategory.style.transition = '0.3s'
-        }
-    });
+    function toggleDropdown(btnId, dropdownClass, angleClass) {
+        let dropdown = document.querySelector(dropdownClass);
+        let angle = document.querySelector(angleClass);
+        let isOpen = dropdown.style.display === 'block';
+        dropdown.style.display = isOpen ? 'none' : 'block';
+        angle.style.transform = isOpen ? 'rotate(0deg)' : 'rotate(180deg)';
+        angle.style.transition = '0.3s';
+    }
 
-    let subCategory = document.querySelector('#subCategory');
-    subCategory.addEventListener('click', function(){
-        let subCategoryDropdown = document.querySelector('.subCategory-dropdown');
-        let angleSubCategory = document.querySelector('.angle-subCategory');
-        if(subCategoryDropdown.style.display === "block"){
-            subCategoryDropdown.style.display = "none"
-            angleSubCategory.style.transform = 'rotate(0deg)'
-            angleSubCategory.style.transition = '0.3s'
-        }else{
-            subCategoryDropdown.style.display = "block"
-            angleSubCategory.style.transform = 'rotate(180deg)'
-            angleSubCategory.style.transition = '0.3s'
-        }
-    });
-
-    let price = document.querySelector('#price');
-    price.addEventListener('click', function(){
-        let priceDropdown = document.querySelector('.price-dropdown');
-        let anglePrice = document.querySelector('.angle-price');
-        if(priceDropdown.style.display === "block"){
-            priceDropdown.style.display = "none"
-            anglePrice.style.transform = 'rotate(0deg)'
-            anglePrice.style.transition = '0.3s'
-        }else{
-            priceDropdown.style.display = "block"
-            anglePrice.style.transform = 'rotate(180deg)'
-            anglePrice.style.transition = '0.3s'
-        }
-    });
-
+    document.querySelector('#category').addEventListener('click', () => toggleDropdown('#category', '.category-dropdown', '.angle-category'));
+    document.querySelector('#subCategory').addEventListener('click', () => toggleDropdown('#subCategory', '.subCategory-dropdown', '.angle-subCategory'));
+    document.querySelector('#price').addEventListener('click', () => toggleDropdown('#price', '.price-dropdown', '.angle-price'));
 
 </script>
    

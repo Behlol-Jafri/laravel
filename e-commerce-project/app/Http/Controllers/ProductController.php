@@ -29,7 +29,7 @@ class ProductController extends Controller
             return view('dashboards.admin.product.productData', compact('products', 'users', 'categories', 'subCategories'));
         } elseif (Auth::user()->hasRole('Vender')) {
             return view('dashboards.vender.product.productData', compact('products', 'users', 'categories', 'subCategories'));
-        } elseif (Auth::user()->hasRole('User')) {
+        } else {
             return view('dashboards.user.product.productData', compact('products', 'users', 'categories', 'subCategories'));
         }
         // return view('dashboards.product.productData', compact('products', 'users', 'categories', 'subCategories'));

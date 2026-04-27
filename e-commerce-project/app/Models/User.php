@@ -27,6 +27,7 @@ class User extends Authenticatable
         'password',
         'dob',
         'phoneNumber',
+        'address',
     ];
 
 
@@ -43,6 +44,11 @@ class User extends Authenticatable
      public function product()
     {
         return $this->hasMany(Product::class);
+    }
+
+    public function orders()
+    {
+        return $this->hasMany(Order::class);
     }
 
     public function getDobAttribute($value)

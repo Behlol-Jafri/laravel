@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Category;
-use App\Models\SubCategory;
+// use App\Models\Category;
+// use App\Models\SubCategory;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controllers\HasMiddleware;
@@ -70,23 +70,32 @@ class UserController extends Controller implements HasMiddleware
 
     public function dashboard()
     {
-        $categories = Category::all();
-        $subCategories = SubCategory::all();
+        // $categories = Category::all();
+        // $subCategories = SubCategory::all();
         if (!Auth::check()) {
             return redirect()->route('loginForm');
+        } elseif (Auth::user()->hasRole('User')){
+            return redirect('/');
+        }else{
+            return view('dashboards.dashboardLayout');
         }
-        if(Auth::user()->hasRole('User')){
-            return redirect()->route('product.index');
-        }
-        return view('dashboards.dashboardLayout');
     }
 
     public function logout(Request $request)
     {
-        Auth::logout();
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
-        return redirect()->route('loginForm');
+        if(Auth::user()->hasRole('User')){
+            Auth::logout();
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
+            return response()->json([
+                'message' => 'ok'
+            ]);
+        }else{
+            Auth::logout();
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
+            return redirect()->route('loginForm');
+        }
     }
 
     public function addUserForm()
