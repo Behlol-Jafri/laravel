@@ -63,7 +63,7 @@ Route::group(['middleware' => ['role:Super Admin|Admin|Vender|User'],'prefix' =>
         return view('dashboards.manageAccess');
     })->name('manage.access');
 
-     Route::resource('posts', PostController::class);
+    Route::resource('posts', PostController::class);
 
     Route::resource('category', CategoryController::class);
     
@@ -71,12 +71,12 @@ Route::group(['middleware' => ['role:Super Admin|Admin|Vender|User'],'prefix' =>
 
     Route::resource('product', ProductController::class);
    
-Route::post('/products/filter', [ProductController::class, 'filter'])->name('products.filter');
+    Route::post('/products/filter', [ProductController::class, 'filter'])->name('products.filter');
 
-Route::get('/products/deleteImage/{id}', [ProductController::class, 'deleteImage'])->name('deleteImage');
+    Route::get('/products/deleteImage/{id}', [ProductController::class, 'deleteImage'])->name('deleteImage');
 
-Route::put('/products/review/{id}', [ProductController::class, 'review'])->name('review');
+    Route::put('/products/review/{id}', [ProductController::class, 'review'])->name('review');
 
-Route::put('/products/reviewRead/{id}', [ProductController::class, 'reviewRead'])->name('reviewRead');
+    Route::put('/products/reviewRead/{id}', [ProductController::class, 'reviewRead'])->name('reviewRead');
 
 });

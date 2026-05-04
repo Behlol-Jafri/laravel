@@ -18,7 +18,7 @@
                 <div class="col-2 bg-warning ms-3 rounded p-0" style="height: 100%; overflow-y: auto; position: sticky; top: 0;">
                     @include('dashboards.sidebar')
                 </div>
-            <div class="col overflow-y-auto h-100">
+            <div class="col overflow-y-auto h-100 custom-scroll">
                 @yield('content')
             </div>
         </div>
