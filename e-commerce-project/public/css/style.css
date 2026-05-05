@@ -1,4 +1,4 @@
-.btn-hover{
+.btn-hover {
     background-color: white;
     color: black;
     border: 1px solid black;
@@ -8,53 +8,66 @@
     text-align: center;
     transition: 0.5s;
 }
-.btn-hover:hover{
+
+.btn-hover:hover {
     background-color: blue;
     color: white;
     border: none;
     transition: 0.5s;
 }
-.product-card{
+
+.product-card {
     transition: 0.3s;
 }
-.product-card:hover{
+
+.product-card:hover {
     transform: scale(1.03);
     transition: 0.3s;
 }
-.card-header div:first-child{
+
+.card-header div:first-child {
     transition: 0.3s;
 }
-.card-header div:first-child:hover{
+
+.card-header div:first-child:hover {
     transform: scale(1.03);
     transition: 0.3s;
 }
-.checkbox:checked + .text {
+
+.checkbox:checked+.text {
     color: blue;
     font-weight: 500;
 }
-.category-dropdown{
+
+.category-dropdown {
     display: none;
 }
-.subCategory-dropdown{
+
+.subCategory-dropdown {
     display: none;
 }
-.price-dropdown{
+
+.price-dropdown {
     display: none;
 }
-.angle-category{
+
+.angle-category {
     transition: 0.3s;
 }
-.angle-subCategory{
+
+.angle-subCategory {
     transition: 0.3s;
 }
-.angle-price{
+
+.angle-price {
     transition: 0.3s;
 }
 
 .cart-img {
     transition: 0.3s;
 }
-.cart-img:hover{
+
+.cart-img:hover {
     transform: scale(1.03);
     transition: 0.3s;
 }
@@ -70,6 +83,49 @@
 .custom-scroll::-webkit-scrollbar {
     display: none;
 }
+
 .custom-scroll {
     scrollbar-width: none;
+}
+
+.text-orange {
+    color: #ff6600 !important;
+}
+
+.order-item-details {
+    font-size: 1.07rem;
+}
+
+.order-item-title {
+    color: #343a40;
+    font-weight: 600;
+    margin-bottom: 4px;
+}
+
+.order-item-sku {
+    color: #aaa;
+    font-size: 0.90rem;
+}
+
+.order-item-price {
+    color: #212529;
+    font-weight: 700;
+}
+
+.order-list-row {
+    transition: background .2s;
+}
+
+.order-list-row:hover {
+    background: #f5f5f5;
+}
+
+#orderItemsList .no-items {
+    padding: 2.5rem 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    color: #ff3d00;
+    font-size: 1.15rem;
 }

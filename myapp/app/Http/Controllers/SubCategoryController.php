@@ -82,7 +82,42 @@ class SubCategoryController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+    try {
+        $subCategory = SubCategory::find($id);
+
+        if (!$subCategory) {
+            return response()->json([
+                'success' => false,
+                'message' => 'SubCategory not found'
+            ], 404);
+        }
+
+        // ✅ Image upload
+        $imageName = $subCategory->image;
+        if ($request->hasFile('image')) {
+            $image     = $request->file('image');
+            $imageName = time() . '_' . $image->getClientOriginalName();
+            $image->move(public_path('subcategories'), $imageName);
+        }
+
+        // ✅ Update data
+        $subCategory->update([
+            'category_id' => $request->category_id ?? $subCategory->category_id,
+            'name'        => $request->name ?? $subCategory->name,
+            'image'       => $imageName,
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'data'    => $subCategory
+        ], 200);
+    } catch (\Throwable $th) {
+        return response()->json([
+            'success' => false,
+            'message' => 'Something went wrong',
+            'error'   => $th->getMessage() // hide in production
+        ], 500);
+    }
     }
 
     /**
@@ -90,6 +125,33 @@ class SubCategoryController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+      try {
+        $subCategory = SubCategory::find($id);
+        if (!$subCategory) {
+            return response()->json([
+                'success' => false,
+                'message' => 'SubCategory not found'
+            ], 404);
+        }
+      if (file_exists(public_path('subcategories/' . $subCategory->image))) {
+        unlink(public_path('subcategories/' . $subCategory->image));
+      } else {
+        return response()->json([
+          'success' => false,
+          'message' => 'Image not found'
+        ], 404);
+      }
+        $subCategory->delete();
+        return response()->json([
+          'success' => true,
+          'message' => 'SubCategory deleted successfully'
+        ], 200);
+      } catch (\Throwable $th) {
+      return response()->json([
+        'success' => false,
+        'message' => 'Something went wrong',
+        'error'   => $th->getMessage() // hide in production
+      ], 500);
     }
+  }
 }
