@@ -40,6 +40,7 @@ class SubCategoryController extends Controller
 
     public function store(Request $request,Category $category)
     {
+        
         $request->validate([
             'title' => 'required|string|min:3|max:15',
             'description' => 'required|string|min:5|max:50',

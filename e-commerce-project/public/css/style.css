@@ -129,3 +129,14 @@
     color: #ff3d00;
     font-size: 1.15rem;
 }
+
+.btn-orange {
+    background: #FF6600 !important;
+    border: none !important;
+    color: #fff !important;
+    transition: 0.3s !important;
+}
+.btn-orange:hover {
+    background: #d8570c !important;
+    color: #fff !important;
+}

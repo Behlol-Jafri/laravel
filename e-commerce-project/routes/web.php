@@ -27,6 +27,11 @@ use Illuminate\Support\Facades\Route;
     Route::get('/checkout',function(){
         return view('dashboards.user.product.checkout');
     });
+
+    Route::get('/payment',function(){
+        return view('dashboards.user.product.payment');
+    })->name('payment');
+
    
     Route::post('/checkout', [OrderController::class, 'checkout'])->name('checkout');
     

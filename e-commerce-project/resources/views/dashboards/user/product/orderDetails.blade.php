@@ -22,9 +22,9 @@
                         <i class="fas fa-map-marker-alt text-orange me-2"></i> Shipping Address
                     </div>
                     <div class="card-body">
-                        <div><strong>{{ Auth::user()->firstName ? Auth::user()->firstName : 'N/A' }}</strong></div>
-                        <div>{{ Auth::user()->address ? Auth::user()->address : 'No address provided' }}</div>
-                        <div class="mt-1">Phone: {{ Auth::user()->phoneNumber ? Auth::user()->phoneNumber : '-' }}</div>
+                        <div><strong>{{ Auth::user()->firstName ?? 'N/A' }}</strong></div>
+                        <div>{{ Auth::user()->address ?? 'No address provided' }}</div>
+                        <div class="mt-1">Phone: {{ Auth::user()->phoneNumber ?? '-' }}</div>
                         <div class="mt-2 text-secondary" style="font-size: 0.9rem;">
                             <i class="fas fa-truck-moving me-1"></i>
                             Delivered by: <span id="deliveryEstimate">3-7 business days</span>
@@ -57,9 +57,10 @@
                             <b>Total</b>
                             <b id="orderGrandTotal">Rs --</b>
                         </div>
-                        <button class="btn btn-success btn-block w-100 mt-3 fw-bold py-2">
+                        <a href="{{ route('payment') }}" class="btn btn-success btn-block w-100 mt-3 fw-bold py-2">
                             Pay Now
-                        </button>
+                        </a>
+                   
                     </div>
                 </div>
             </div>
@@ -122,7 +123,7 @@
                         <td class="order-item-price">Rs. ${Number(item.price).toFixed(2)}</td>
                         <td class="order-item-price">Rs. ${(item.price * item.quantity).toFixed(2)}</td>
                         <td>
-                            <span class="badge bg-${item.status_class ?? 'info'}">${item.status ?? 'Processing'}</span>
+                            <span class="badge bg-${item.status_class ?? 'info'}">${item.status ?? 'pending'}</span>
                         </td>
                     </tr>
                 `;
