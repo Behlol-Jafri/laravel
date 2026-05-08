@@ -51,6 +51,11 @@
                             </div>
                             </div>
                             <div class="mb-3">
+                                <label for="" class="form-label">Address</label>
+                                <input type="text" name="address" value="{{ old('address') }}" class="form-control" placeholder="Address">
+                                 @error('address')<span class="text-danger">{{ $message }}</span>@enderror
+                            </div>
+                            <div class="mb-3">
                                 <label for="" class="form-label">Phone Number</label>
                                 <input type="number" name="phoneNumber" value="{{ old('phoneNumber') }}" class="form-control" placeholder="Phone Number">
                                  @error('phoneNumber')<span class="text-danger">{{ $message }}</span>@enderror

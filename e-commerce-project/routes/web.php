@@ -18,7 +18,7 @@ use Illuminate\Support\Facades\Route;
     Route::get('/signup', [AuthController::class, 'signupForm'])->name('signupForm');
     Route::post('/signup', [UserController::class, 'signup'])->name('signup');
     Route::post('/login', [UserController::class, 'login'])->name('login');
-
+    // Route::resource('/roles', RoleController::class);
     Route::get('/', [UserProductController::class,'index']);
     Route::post('/filter', [UserProductController::class,'filter'])->name('filter');
     Route::get('/cartDetails', [UserProductController::class,'cartDetails'])->name('cartDetails');

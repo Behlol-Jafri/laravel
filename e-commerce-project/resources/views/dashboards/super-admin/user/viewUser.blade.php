@@ -11,6 +11,7 @@
                         <h6>Second Name : {{ $user->secondName }}</h6>
                         <p>Email : {{ $user->email }}</p>
                         <p>DOB : {{ $user->dob }}</p>
+                        <p>Address : {{ $user->address }}</p>
                         <p>Phone Number : {{ $user->phoneNumber }}</p>
                         <p>Role : {{ $user->getRoleNames()->first() }}</p>
                         <a href="{{ route('users') }}" class="btn btn-secondary">Back</a>

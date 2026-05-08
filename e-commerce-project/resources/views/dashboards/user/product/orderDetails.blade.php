@@ -123,7 +123,7 @@
                         <td class="order-item-price">Rs. ${Number(item.price).toFixed(2)}</td>
                         <td class="order-item-price">Rs. ${(item.price * item.quantity).toFixed(2)}</td>
                         <td>
-                            <span class="badge bg-${item.status_class ?? 'info'}">${item.status ?? 'pending'}</span>
+                            <span class="badge bg-${item.status_class ?? 'success'}">${item.status ?? 'pending'}</span>
                         </td>
                     </tr>
                 `;

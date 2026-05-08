@@ -36,7 +36,8 @@ class UserController extends Controller implements HasMiddleware
             'email' => 'required|email|unique:users,email',
             'password' => 'required|min:3',
             'dob' => 'required|date',
-            'phoneNumber' => 'required|',
+            'phoneNumber' => 'required',
+            'address' => 'required',
             'role' => 'required',
         ]);
 
@@ -47,6 +48,7 @@ class UserController extends Controller implements HasMiddleware
             'password' => $request->password,
             'dob' => $request->dob,
             'phoneNumber' => $request->phoneNumber,
+            'address' => $request->address,
         ]);
         $user->assignRole($request->role);
 
@@ -121,7 +123,8 @@ class UserController extends Controller implements HasMiddleware
             'email' => 'required|email|unique:users,email',
             'password' => 'required|min:3',
             'dob' => 'required|date',
-            'phoneNumber' => 'required|',
+            'phoneNumber' => 'required',
+            'address' => 'required',
             'role' => 'required',
         ]);
 
@@ -132,6 +135,7 @@ class UserController extends Controller implements HasMiddleware
             'password' => $request->password,
             'dob' => $request->dob,
             'phoneNumber' => $request->phoneNumber,
+            'address' => $request->address,
         ]);
         $user->assignRole($request->role);
 
@@ -192,7 +196,8 @@ class UserController extends Controller implements HasMiddleware
             'secondName' => 'required|string|min:3|max:15',
             'email' => 'required|email',
             'dob' => 'required|date',
-            'phoneNumber' => 'required|',
+            'phoneNumber' => 'required',
+            'address' => 'required',
             'role' => 'required',
         ]);
 
@@ -203,6 +208,7 @@ class UserController extends Controller implements HasMiddleware
             'email' => $request->email,
             'dob' => $request->dob,
             'phoneNumber' => $request->phoneNumber,
+            'address' => $request->address,
         ]);
         $user->assignRole($request->role);
 

@@ -19,9 +19,9 @@ class ProductController extends Controller
         $categories = Category::all();
         $subCategories = SubCategory::all();
         if (Auth::user()->hasRole('Vender')) {
-            $products = Product::where('user_id', Auth::user()->id)->orderBy('id', 'desc')->paginate(9);
+            $products = Product::where('user_id', Auth::user()->id)->orderBy('id', 'desc')->paginate(10);
         } else {
-            $products = Product::orderBy('id', 'desc')->paginate(9);
+            $products = Product::orderBy('id', 'desc')->paginate(10);
         }
         if (Auth::user()->hasRole('Super Admin')) {
             return view('dashboards.super-admin.product.productData', compact('products', 'users', 'categories', 'subCategories'));
@@ -249,7 +249,7 @@ class ProductController extends Controller
             });
         }
 
-        $products = $query->orderBy('id', 'desc')->paginate(9);
+        $products = $query->orderBy('id', 'desc')->paginate(10);
 
          if (Auth::user()->hasRole('Super Admin')) {
             $viewTable = 'dashboards.super-admin.product.productTable';

@@ -48,8 +48,8 @@ class Product extends Model
     {
         return ucfirst($value);
     }
-    public function getPriceAttribute($value)
-    {
-        return Number::currency($value, in: 'USD');
-    }
+    // public function getPriceAttribute($value)
+    // {
+    //     return Number::currency($value, in: 'USD');
+    // }
 }

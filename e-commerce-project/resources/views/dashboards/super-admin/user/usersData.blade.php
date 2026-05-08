@@ -19,6 +19,7 @@
                     <th>Email</th>
                     <th>DOB</th>
                     <th>Phone</th>
+                    <th>Address</th>
                     <th>Role</th>
                     <th class="text-center" colspan="3">Actions</th>
                 </tr>
@@ -32,6 +33,7 @@
                         <td>{{ $user->email }}</td>
                         <td>{{ $user->dob }}</td>
                         <td>{{ $user->phoneNumber }}</td>
+                        <td>{{ $user->address }}</td>
                         <td>{{ $user->getRoleNames()->first() }}</td>
                         <td><a href="{{ route('viewUser', $user->id) }}" class="btn btn-success"><i class="fa-solid fa-eye fa-sm"></i></a></td>
                         @can('update user')
