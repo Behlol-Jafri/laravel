@@ -17,7 +17,7 @@ class UserProductController extends Controller
         $subCategories = SubCategory::all();
 
         if ($request->ajax()) {
-            $offset = $request->get('offset', 0);
+            $offset = (int) $request->get('offset', 0);
             $limit = 5;
 
             $query = Product::orderBy('id', 'desc');
@@ -43,23 +43,25 @@ class UserProductController extends Controller
             }
 
             $products = $query->offset($offset)->limit($limit)->get();
+            $showEmptyCatalogMessage = $offset === 0;
 
             return response()->json([
-                'html'    => view('dashboards.user.product.productTable', compact('products'))->render(),
+                'html'    => view('dashboards.user.product.productTable', compact('products', 'showEmptyCatalogMessage'))->render(),
                 'hasMore' => $products->count() == $limit,
             ]);
         }
 
         $products = Product::orderBy('id', 'desc')->offset(0)->limit(5)->get();
+        $showEmptyCatalogMessage = true;
 
-        return view('dashboards.user.product.productData', compact('products', 'users', 'categories', 'subCategories'));
+        return view('dashboards.user.product.productData', compact('products', 'users', 'categories', 'subCategories', 'showEmptyCatalogMessage'));
        
     }
 
     public function filter(Request $request)
     {
         $limit = 5;
-        $offset = $request->get('offset', 0);
+        $offset = (int) $request->get('offset', 0);
 
         $query = Product::query();
 
@@ -84,9 +86,10 @@ class UserProductController extends Controller
         }
 
         $products = $query->orderBy('id', 'desc')->offset($offset)->limit($limit)->get();
+        $showEmptyCatalogMessage = $offset === 0;
 
         return response()->json([
-            'html'    => view('dashboards.user.product.productTable', compact('products'))->render(),
+            'html'    => view('dashboards.user.product.productTable', compact('products', 'showEmptyCatalogMessage'))->render(),
             'hasMore' => $products->count() == $limit,
         ]);
     }

@@ -26,7 +26,7 @@
             </div>
         </div>
     @endforeach
-@else 
+@elseif($showEmptyCatalogMessage ?? true)
     <div class="text-center text-danger">
         Products Not Found
     </div>
