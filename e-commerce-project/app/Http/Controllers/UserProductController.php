@@ -7,11 +7,13 @@ use App\Models\Product;
 use App\Models\SubCategory;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class UserProductController extends Controller
 {
     public function index(Request $request)
     {
+        if (!Auth::user() || Auth::user()->hasRole('User')){
         $users = User::all();
         $categories = Category::all();
         $subCategories = SubCategory::all();
@@ -55,7 +57,9 @@ class UserProductController extends Controller
         $showEmptyCatalogMessage = true;
 
         return view('dashboards.user.product.productData', compact('products', 'users', 'categories', 'subCategories', 'showEmptyCatalogMessage'));
-       
+    }else{
+        return redirect()->route('dashboard');
+    }
     }
 
     public function filter(Request $request)

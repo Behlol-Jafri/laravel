@@ -9,6 +9,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use SendGrid;
+use SendGrid\Mail\Mail;
 
 class OrderController extends Controller
 {
@@ -75,6 +77,17 @@ class OrderController extends Controller
             $order->update([
                 'total' => $total
             ]);
+
+            $sendgrid = new \SendGrid(env('SENDGRID_API_KEY'));
+
+            $email = new Mail();
+            $email->setFrom("alibehloljafri@gmail.com", "E-commerce website");
+            $email->setSubject("Your Order");
+            $email->addTo("alibehloljafri@gmail.com");
+            $email->addContent("text/plain", "Your Order Placed Successfully");
+
+            $response = $sendgrid->send($email);
+
             return response()->json([
                 'massage' => 'ok',
             ]);

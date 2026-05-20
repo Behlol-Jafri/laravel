@@ -10,6 +10,7 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SubCategoryController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\MailController;
 use App\Http\Controllers\UserProductController;
 use Illuminate\Support\Facades\Route;
 
@@ -18,7 +19,6 @@ use Illuminate\Support\Facades\Route;
     Route::get('/signup', [AuthController::class, 'signupForm'])->name('signupForm');
     Route::post('/signup', [UserController::class, 'signup'])->name('signup');
     Route::post('/login', [UserController::class, 'login'])->name('login');
-    // Route::resource('/roles', RoleController::class);
     Route::get('/', [UserProductController::class,'index']);
     Route::post('/filter', [UserProductController::class,'filter'])->name('filter');
     Route::get('/cartDetails', [UserProductController::class,'cartDetails'])->name('cartDetails');
@@ -32,6 +32,7 @@ use Illuminate\Support\Facades\Route;
         return view('dashboards.user.product.payment');
     })->name('payment');
 
+    Route::get('/send-mail', [MailController::class, 'sendMail']);
    
     Route::post('/checkout', [OrderController::class, 'checkout'])->name('checkout');
     
