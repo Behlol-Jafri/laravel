@@ -15,27 +15,27 @@ use App\Http\Controllers\UserProductController;
 use Illuminate\Support\Facades\Route;
 
 // Route::middleware('guest')->group(function () {
-    Route::get('/login', [AuthController::class, 'loginForm'])->name('loginForm');
-    Route::get('/signup', [AuthController::class, 'signupForm'])->name('signupForm');
-    Route::post('/signup', [UserController::class, 'signup'])->name('signup');
-    Route::post('/login', [UserController::class, 'login'])->name('login');
-    Route::get('/', [UserProductController::class,'index']);
-    Route::post('/filter', [UserProductController::class,'filter'])->name('filter');
-    Route::get('/cartDetails', [UserProductController::class,'cartDetails'])->name('cartDetails');
-    
+Route::get('/login', [AuthController::class, 'loginForm'])->name('loginForm');
+Route::get('/signup', [AuthController::class, 'signupForm'])->name('signupForm');
+Route::post('/signup', [UserController::class, 'signup'])->name('signup');
+Route::post('/login', [UserController::class, 'login'])->name('login');
+Route::get('/', [UserProductController::class, 'index']);
+Route::post('/filter', [UserProductController::class, 'filter'])->name('filter');
+Route::get('/cartDetails', [UserProductController::class, 'cartDetails'])->name('cartDetails');
 
-    Route::get('/checkout',function(){
-        return view('dashboards.user.product.checkout');
-    });
 
-    Route::get('/payment',function(){
-        return view('dashboards.user.product.payment');
-    })->name('payment');
+Route::get('/checkout', function () {
+    return view('dashboards.user.product.checkout');
+});
 
-    Route::get('/send-mail', [MailController::class, 'sendMail']);
-   
-    Route::post('/checkout', [OrderController::class, 'checkout'])->name('checkout');
-    
+Route::get('/payment', function () {
+    return view('dashboards.user.product.payment');
+})->name('payment');
+
+Route::get('/send-mail', [MailController::class, 'sendMail']);
+
+Route::post('/checkout', [OrderController::class, 'checkout'])->name('checkout');
+
 // });
 
 Route::middleware('auth')->group(function () {
@@ -44,10 +44,10 @@ Route::middleware('auth')->group(function () {
     Route::get('/getOrderItem', [OrderItemController::class, 'getOrderItem'])->name('getOrderItem');
     Route::put('/updateOrderItem/{id}', [OrderItemController::class, 'updateOrderItem'])->name('updateOrderItem');
     Route::delete('/deleteOrderItem/{id}', [OrderItemController::class, 'deleteOrderItem'])->name('deleteOrderItem');
-    Route::get('/orderDetails', [UserProductController::class,'orderDetails'])->name('orderDetails');
+    Route::get('/orderDetails', [UserProductController::class, 'orderDetails'])->name('orderDetails');
 });
 
-Route::group(['middleware' => ['role:Super Admin|Admin|Vender|User'],'prefix' => '/dashboard'], function () {
+Route::group(['middleware' => ['role:Super Admin|Admin|Vender|User'], 'prefix' => '/dashboard'], function () {
     Route::get('/addUser', [UserController::class, 'addUserForm'])->name('addUser');
     Route::post('/addUser', [UserController::class, 'addUser'])->name('addUser.store');
     Route::get('/users', [UserController::class, 'usersData'])->name('users');
@@ -72,11 +72,11 @@ Route::group(['middleware' => ['role:Super Admin|Admin|Vender|User'],'prefix' =>
     Route::resource('posts', PostController::class);
 
     Route::resource('category', CategoryController::class);
-    
+
     Route::resource('category.subCategory', SubCategoryController::class);
 
     Route::resource('product', ProductController::class);
-   
+
     Route::post('/products/filter', [ProductController::class, 'filter'])->name('products.filter');
 
     Route::get('/products/deleteImage/{id}', [ProductController::class, 'deleteImage'])->name('deleteImage');
@@ -84,5 +84,4 @@ Route::group(['middleware' => ['role:Super Admin|Admin|Vender|User'],'prefix' =>
     Route::put('/products/review/{id}', [ProductController::class, 'review'])->name('review');
 
     Route::put('/products/reviewRead/{id}', [ProductController::class, 'reviewRead'])->name('reviewRead');
-
 });

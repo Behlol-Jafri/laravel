@@ -19,7 +19,7 @@
             <div class="col-lg-4">
                 <div class="card mb-3 shadow-sm">
                     <div class="card-header bg-white fw-semibold">
-                        <i class="fas fa-map-marker-alt text-orange me-2"></i> Shipping Address
+                        <i class="fas fa-map-marker-alt text-orange me-2 "></i> Shipping Address
                     </div>
                     <div class="card-body">
                         <div><strong>{{ Auth::user()->firstName ?? 'N/A' }}</strong></div>
